@@ -146,7 +146,8 @@ const App = () => {
           height: formData.height,
           weight: formData.weight,
           bmi: formData.bmi,
-          bmiCategory: formData.bmiCategory
+          bmiCategory: formData.bmiCategory,
+          gender: formData.gender
         },
         workoutPlan: {
           days: [
@@ -217,6 +218,11 @@ const App = () => {
                       'Grilled chicken with sweet potato and broccoli'
             }
           ]
+        },
+        statistics: {
+          workoutsPerWeek: formData.workoutsPerWeek,
+          fitnessLevel: formData.fitnessLevel,
+          equipment: formData.availableEquipment
         }
       };
       
@@ -238,7 +244,7 @@ const App = () => {
                 name="name" 
                 value={formData.name} 
                 onChange={handleChange} 
-                className="select-input"
+                className="user-input"
                 placeholder="Enter your name"
               />
             </div>
@@ -250,7 +256,7 @@ const App = () => {
                 name="age" 
                 value={formData.age} 
                 onChange={handleChange} 
-                className="select-input"
+                className="user-input"
                 placeholder="Enter your age"
                 min="16"
                 max="99"
@@ -278,7 +284,7 @@ const App = () => {
                 name="height" 
                 value={formData.height} 
                 onChange={handleChange} 
-                className="select-input"
+                className="user-input"
                 placeholder="Enter your height in cm"
                 min="100"
                 max="250"
@@ -292,7 +298,7 @@ const App = () => {
                 name="weight" 
                 value={formData.weight} 
                 onChange={handleChange} 
-                className="select-input"
+                className="user-input"
                 placeholder="Enter your weight in kg"
                 min="30"
                 max="300"
@@ -300,9 +306,10 @@ const App = () => {
             </div>
             
             {formData.bmi && (
-              <div className="bmi-result">
-                <h3>Your BMI: {formData.bmi}</h3>
-                <p>Category: {formData.bmiCategory}</p>
+              <div className="bmi-display">
+                <h4>Your Body Mass Index</h4>
+                <div className="bmi-value">{formData.bmi}</div>
+                <div className="bmi-category">{formData.bmiCategory}</div>
               </div>
             )}
             
@@ -505,17 +512,68 @@ const App = () => {
         <div className="plan-container">
           <h2>Your Personalized Fitness Plan</h2>
           
-          <div className="plan-section">
-            <h3>Your Details</h3>
-            <div className="user-details">
-              <p><strong>Name:</strong> {plan.userDetails.name}</p>
-              <p><strong>Age:</strong> {plan.userDetails.age}</p>
-              <p><strong>Height:</strong> {plan.userDetails.height} cm</p>
-              <p><strong>Weight:</strong> {plan.userDetails.weight} kg</p>
-              <p><strong>BMI:</strong> {plan.userDetails.bmi} ({plan.userDetails.bmiCategory})</p>
+          {/* User Details Section with updated CSS */}
+          <div className="user-details-container">
+            <h3>Your Profile</h3>
+            <div className="profile-image-container">
+              <div className="profile-image">
+                {formData.name ? formData.name.charAt(0).toUpperCase() : "U"}
+              </div>
+              <button className="upload-image-button">Upload Photo</button>
+            </div>
+            
+            <div className="user-details-grid">
+              <div className="user-details-field">
+                <label>Name</label>
+                <p>{plan.userDetails.name}</p>
+              </div>
+              <div className="user-details-field">
+                <label>Age</label>
+                <p>{plan.userDetails.age}</p>
+              </div>
+              <div className="user-details-field">
+                <label>Gender</label>
+                <p>{plan.userDetails.gender.charAt(0).toUpperCase() + plan.userDetails.gender.slice(1)}</p>
+              </div>
+              <div className="user-details-field">
+                <label>Height</label>
+                <p>{plan.userDetails.height} cm</p>
+              </div>
+              <div className="user-details-field">
+                <label>Weight</label>
+                <p>{plan.userDetails.weight} kg</p>
+              </div>
+            </div>
+            
+            {plan.userDetails.bmi && (
+              <div className="bmi-display">
+                <h4>Your Body Mass Index</h4>
+                <div className="bmi-value">{plan.userDetails.bmi}</div>
+                <div className="bmi-category">{plan.userDetails.bmiCategory}</div>
+              </div>
+            )}
+            
+            <div className="user-stats-summary">
+              <div className="stat-card">
+                <h5>Fitness Level</h5>
+                <div className="stat-value">{plan.statistics.fitnessLevel.charAt(0).toUpperCase() + plan.statistics.fitnessLevel.slice(1)}</div>
+              </div>
+              <div className="stat-card">
+                <h5>Weekly Workouts</h5>
+                <div className="stat-value">{plan.statistics.workoutsPerWeek}</div>
+              </div>
+              <div className="stat-card">
+                <h5>Equipment</h5>
+                <div className="stat-value">{plan.statistics.equipment.length || "None"}</div>
+              </div>
+            </div>
+            
+            <div className="user-details-actions">
+              <button className="edit-details-button">Edit Profile</button>
             </div>
           </div>
           
+          {/* Workout Plan Section */}
           <div className="plan-section">
             <h3>Workout Plan</h3>
             <div className="workout-days">
@@ -540,6 +598,7 @@ const App = () => {
             </div>
           </div>
           
+          {/* Nutrition Plan Section */}
           <div className="plan-section">
             <h3>Nutrition Plan</h3>
             <div className="nutrition-overview">
@@ -566,7 +625,7 @@ const App = () => {
             </div>
           </div>
           
-          <div className="action-buttons">
+          <div className="navigation-buttons">
             <button 
               className="back-button"
               onClick={() => {
@@ -576,7 +635,7 @@ const App = () => {
             >
               Create New Plan
             </button>
-            <button className="download-button">
+            <button className="next-button">
               Download Plan
             </button>
           </div>
